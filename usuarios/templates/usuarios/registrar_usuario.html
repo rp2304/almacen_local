@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Usuario</title>
+</head>
+<body>
+    <h2>Registrar Nuevo Usuario</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Registrar</button>
+    </form>
+
+<h3>Usuarios Registrados</h3>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Rol</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+    </tr>
+    {% for u in usuarios %}
+    <tr>
+        <td>{{ u.nombre }} {{ u.apellido }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.get_rol_display }}</td>
+        <td>{{ u.is_active|yesno:"Sí,No" }}</td>
+        <td>
+            <a href="{% url 'editar_usuario' u.id %}">Editar</a>
+            {% if request.user != u %}
+                | <a href="{% url 'eliminar_usuario' u.id %}" onclick="return confirm('¿Eliminar usuario?');">Eliminar</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">No hay usuarios registrados aún.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+    <p><a href="{% url 'panel_administrador' %}">Volver al Panel de Administrador</a></p>
+    <p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
+</body>
+</html>
