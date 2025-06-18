@@ -1,34 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Panel de Administrador</title>
-    <style>
-        body { font-family: Arial; padding: 30px; background: #f5f5f5; }
-        .contenedor { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-        h2 { text-align: center; }
-        .boton {
-            display: block;
-            margin: 10px auto;
-            background: #2c3e50;
-            color: white;
-            padding: 12px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .boton:hover {
-            background: #34495e;
-        }
-    </style>
-</head>
-<body>
-    <div class="contenedor">
-        <h2>Bienvenido, Administrador</h2>
+{% extends 'base.html' %}
+
+{% block title %}Panel de Administrador{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <h2 style="text-align:center;">Bienvenido, Administrador</h2>
+
+    <div class="opciones-panel">
         <a class="boton" href="{% url 'registrar_usuario' %}">👤 Registro de Usuarios</a>
         <a class="boton" href="{% url 'registrar_producto' %}">📦 Registro de Productos</a>
         <a class="boton" href="{% url 'ver_stock' %}">📊 Ver Stock</a>
-        <a class="boton" href="{% url 'logout' %}">Cerrar Sesión</a>
+        <a class="boton" href="{% url 'logout' %}">🚪 Cerrar Sesión</a>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

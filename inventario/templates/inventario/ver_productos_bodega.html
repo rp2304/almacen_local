@@ -1,35 +1,52 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Productos Almacenados</title>
-    <style>
-        body { font-family: Arial; background-color: #f5f5f5; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { padding: 10px; border: 1px solid #ccc; }
-        th { background-color: #3498db; color: white; }
-        .volver { margin-top: 20px; display: inline-block; }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Productos Almacenados{% endblock %}
+
+{% block content %}
+<div class="contenedor">
     <h2>Productos almacenados</h2>
+
+    <!-- Formulario de filtro -->
+    <form method="get" class="filtro-form">
+        <label for="categoria">Filtrar por categoría:</label>
+        <select name="categoria" id="categoria">
+            <option value="">-- Todas --</option>
+            {% for cat in categorias %}
+                <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == categoria_seleccionada %}selected{% endif %}>
+                    {{ cat.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <!-- Tabla de productos -->
     <table>
-        <tr>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Stock</th>
-        </tr>
-        {% for p in productos %}
-        <tr>
-            <td>{{ p.nombre }}</td>
-            <td>{{ p.categoria.nombre }}</td>
-            <td>{{ p.stock }}</td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="3">No hay productos registrados.</td></tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr>
+                <td>{{ p.nombre }}</td>
+                <td>{{ p.categoria.nombre }}</td>
+                <td {% if p.stock <= p.stock_minimo %}class="low-stock"{% endif %}>
+                    {{ p.stock }}
+                    {% if p.stock <= p.stock_minimo %}
+                        🔴 Bajo stock
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">No hay productos registrados.</td></tr>
+            {% endfor %}
+        </tbody>
     </table>
 
     <a class="volver" href="{% url 'panel_bodega' %}">⬅ Volver al panel</a>
-</body>
-</html>
+</div>
+{% endblock %}
